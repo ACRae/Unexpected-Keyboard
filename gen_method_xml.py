@@ -31,7 +31,7 @@ LOCALES = [
   loc("de_CH", "latin", "latn_qwertz_de", extra_keys="accent_trema:ä:ö:ü@u|ß"),
   loc("de_DE", "latin", "latn_qwertz_de", extra_keys="accent_trema:ä:ö:ü@u|ß|€"),
   loc("el", "latin", "grek_qwerty", extra_keys="£@l|€"),
-  loc("en", "latin", "latn_qwerty_us", dictionary="en_GB"),
+  loc("en", "latin", "latn_qwerty_us", dictionary="en_US"),
   loc("en_AU", "latin", "latn_qwerty_us"),
   loc("en_CA", "latin", "latn_qwerty_us", dictionary="en_US"),
   loc("en_GB", "latin", "latn_qwerty_gb", extra_keys="£@l"),
@@ -97,7 +97,7 @@ LOCALES = [
 ]
 
 # The locale that is at the beginning of the list.
-DEFAULT_LOCALE = "en_GB"
+DEFAULT_LOCALE = "en_US"
 
 def parse_dictionaries():
     tree = ET.parse("res/values/dictionaries.xml")
