@@ -94,11 +94,14 @@ public class CandidatesView extends LinearLayout
     set_sizes(config);
   }
 
+  /** Fraction of a keyboard row height used for the suggestion banner. */
+  static final float CANDIDATES_HEIGHT_RATIO = 0.75f;
+
   /** Set the height of the suggestion row and the text size. */
   void set_sizes(Config config)
   {
-    // Make the candidates view about as high as a keyboard row.
-    float row_height = config.keyboard_rows_height_pixels * (1 - config.key_vertical_margin);
+    // Make the candidates view shorter than a full keyboard row to save space.
+    float row_height = config.keyboard_rows_height_pixels * (1 - config.key_vertical_margin) * CANDIDATES_HEIGHT_RATIO;
     ViewGroup.MarginLayoutParams p =
       (ViewGroup.MarginLayoutParams)getLayoutParams();
     p.height = (int)row_height;

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Dark variants used when the system is in night/dark mode. -->
+  <style name="appTheme" parent="@android:style/Theme.Material"/>
+  <style name="settingsTheme" parent="appTheme">
+    <item name="android:fitsSystemWindows">true</item>
+  </style>
+</resources>
