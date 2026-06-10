@@ -8,10 +8,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.zip.GZIPInputStream;
 import juloo.cdict.Cdict;
 import juloo.keyboard2.Logs;
 import juloo.keyboard2.Utils;
@@ -19,6 +22,10 @@ import juloo.keyboard2.Utils;
 /** Manage and load installed dictionaries. */
 public final class Dictionaries
 {
+  /** Dictionary names that are bundled in the APK under assets/dicts/.
+      They are auto-installed from assets the first time they are requested. */
+  static final Set<String> BUNDLED_DICTS =
+    new HashSet<String>(Arrays.asList("pt_PT"));
   public static Dictionaries instance(Context ctx)
   {
     if (_instance == null)
@@ -121,7 +128,17 @@ public final class Dictionaries
   Cdict[] load_uncached(String dict_name)
   {
     if (!_installed_dictionaries.contains(dict_name))
-      return null;
+    {
+      // Auto-install from bundled assets on first use.
+      if (!BUNDLED_DICTS.contains(dict_name))
+        return null;
+      try
+      {
+        byte[] data = load_asset(_context, dict_name);
+        install(dict_name, data);
+      }
+      catch (Exception e) { return null; }
+    }
     try
     {
       FileInputStream inp = _context.openFileInput(dict_file_name(dict_name));
@@ -131,6 +148,16 @@ public final class Dictionaries
     }
     catch (IOException e) { return null; }
     catch (Cdict.ConstructionError e) { return null; }
+  }
+
+  /** Read a bundled dictionary from assets/dicts/ and decompress it. */
+  static byte[] load_asset(Context ctx, String dict_name) throws IOException
+  {
+    InputStream is = ctx.getAssets().open("dicts/" + dict_name + ".dict");
+    GZIPInputStream gz = new GZIPInputStream(is);
+    byte[] data = Utils.read_all_bytes(gz);
+    gz.close();
+    return data;
   }
 
   void save()

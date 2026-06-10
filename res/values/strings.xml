@@ -169,6 +169,12 @@
     <string name="dictionaries_from_internet">Download a dictionary from the Internet</string>
     <string name="dictionaries_download_success">Dictionary installed</string>
     <string name="dictionaries_download_failed">Download failed</string>
+    <string name="dict_import_header">Import a dictionary from a file or URL</string>
+    <string name="dict_import_file_btn">From file</string>
+    <string name="dict_import_url_btn">From URL</string>
+    <string name="dict_import_url_title">Import from URL</string>
+    <string name="dict_import_url_hint">https://example.com/dict.dict</string>
+    <string name="dict_import_select_locale">Select the language for this dictionary</string>
     <string name="dictionaries_activity_not_enabled">You must first enable the keyboard to download dictionaries.</string>
     <string name="candidates_status_click_to_install">Click to install a dictionary for %s</string>
 </resources>

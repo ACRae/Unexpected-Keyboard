@@ -6,7 +6,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.net.Uri;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -146,6 +149,65 @@ public class DictionaryListView extends LinearLayout
           ? R.drawable.ic_delete : R.drawable.ic_download);
       download_button.setVisibility(pending.contains(dict_name)
           ? View.GONE : View.VISIBLE);
+    }
+  }
+
+  /** Install a dictionary from a content URI (e.g., from the file picker). */
+  public void install_from_uri(final Uri uri, final String dict_name)
+  {
+    run_dictionary_action(dict_name, new Runnable()
+        {
+          public void run()
+          {
+            try
+            {
+              InputStream is =
+                getContext().getContentResolver().openInputStream(uri);
+              byte[] data = try_decompress(Utils.read_all_bytes(is));
+              is.close();
+              Cdict.of_bytes(data);
+              _dictionaries.install(dict_name, data);
+              post_toast(R.string.dictionaries_download_success);
+            }
+            catch (Exception e) { post_toast(R.string.dictionaries_download_failed); }
+          }
+        });
+  }
+
+  /** Install a dictionary downloaded from a custom URL. */
+  public void install_from_url(final String url_str, final String dict_name)
+  {
+    run_dictionary_action(dict_name, new Runnable()
+        {
+          public void run()
+          {
+            try
+            {
+              URLConnection con = new URL(url_str).openConnection();
+              con.setRequestProperty("Accept-Encoding", "identity");
+              byte[] data = try_decompress(Utils.read_all_bytes(con.getInputStream()));
+              Cdict.of_bytes(data);
+              _dictionaries.install(dict_name, data);
+              post_toast(R.string.dictionaries_download_success);
+            }
+            catch (Exception e) { post_toast(R.string.dictionaries_download_failed); }
+          }
+        });
+  }
+
+  /** Try to decompress as gzip; return raw bytes if not a gzip stream. */
+  static byte[] try_decompress(byte[] data) throws IOException
+  {
+    try
+    {
+      GZIPInputStream gz = new GZIPInputStream(new ByteArrayInputStream(data));
+      byte[] out = Utils.read_all_bytes(gz);
+      gz.close();
+      return out;
+    }
+    catch (IOException e)
+    {
+      return data;
     }
   }
 

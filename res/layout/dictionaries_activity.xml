@@ -2,6 +2,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:fitsSystemWindows="true">
   <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical">
     <TextView style="@style/paragraph" android:text="@string/dictionaries_from_internet"/>
-    <juloo.keyboard2.dict.DictionaryListView style="@style/dictionary_list_view"/>
+    <juloo.keyboard2.dict.DictionaryListView android:id="@+id/dict_list_view" style="@style/dictionary_list_view"/>
+    <TextView style="@style/paragraph" android:text="@string/dict_import_header"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center" android:paddingBottom="16dp">
+      <Button android:id="@+id/dict_import_file_btn" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="8dp" android:text="@string/dict_import_file_btn"/>
+      <Button android:id="@+id/dict_import_url_btn" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" android:text="@string/dict_import_url_btn"/>
+    </LinearLayout>
   </LinearLayout>
 </ScrollView>
