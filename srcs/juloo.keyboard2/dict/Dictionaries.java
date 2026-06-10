@@ -22,10 +22,10 @@ import juloo.keyboard2.Utils;
 /** Manage and load installed dictionaries. */
 public final class Dictionaries
 {
-  /** Dictionary names that are bundled in the APK under assets/dicts/.
-      They are auto-installed from assets the first time they are requested. */
-  static final Set<String> BUNDLED_DICTS =
-    new HashSet<String>(Arrays.asList("pt_PT"));
+  /** Dictionary names bundled in the APK under assets/dicts/.
+      These are installed on demand (user action) rather than automatically. */
+  public static final Set<String> BUNDLED_DICTS =
+    new HashSet<String>(Arrays.asList("pt_PT", "en_GB", "en_US"));
   public static Dictionaries instance(Context ctx)
   {
     if (_instance == null)
@@ -125,20 +125,17 @@ public final class Dictionaries
     }
   }
 
+  /** Install a bundled dictionary from assets. Throws if not bundled or on IO error. */
+  public void install_from_bundle(String dict_name) throws IOException
+  {
+    byte[] data = load_asset(_context, dict_name);
+    install(dict_name, data);
+  }
+
   Cdict[] load_uncached(String dict_name)
   {
     if (!_installed_dictionaries.contains(dict_name))
-    {
-      // Auto-install from bundled assets on first use.
-      if (!BUNDLED_DICTS.contains(dict_name))
-        return null;
-      try
-      {
-        byte[] data = load_asset(_context, dict_name);
-        install(dict_name, data);
-      }
-      catch (Exception e) { return null; }
-    }
+      return null;
     try
     {
       FileInputStream inp = _context.openFileInput(dict_file_name(dict_name));
@@ -150,7 +147,7 @@ public final class Dictionaries
     catch (Cdict.ConstructionError e) { return null; }
   }
 
-  /** Read a bundled dictionary from assets/dicts/ and decompress it. */
+  /** Decompress and read a bundled dictionary from assets/dicts/. */
   static byte[] load_asset(Context ctx, String dict_name) throws IOException
   {
     InputStream is = ctx.getAssets().open("dicts/" + dict_name + ".dict");

@@ -78,7 +78,22 @@ public class DictionaryListView extends LinearLayout
           public void run()
           {
             if (_dictionaries.get_installed().contains(dict_name))
+            {
               _dictionaries.uninstall(dict_name);
+            }
+            else if (Dictionaries.BUNDLED_DICTS.contains(dict_name))
+            {
+              // Install from the bundled asset — no internet needed.
+              try
+              {
+                _dictionaries.install_from_bundle(dict_name);
+                post_toast(R.string.dictionaries_download_success);
+              }
+              catch (Exception e)
+              {
+                post_toast(R.string.dictionaries_download_failed);
+              }
+            }
             else if (install_dictionary_from_internet(dict_name))
               post_toast(R.string.dictionaries_download_success);
             else
