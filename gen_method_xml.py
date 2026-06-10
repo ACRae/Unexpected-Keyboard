@@ -75,7 +75,7 @@ LOCALES = [
   loc("nl_BE", "latin", "latn_azerty_be", extra_keys="accent_grave:è@f|accent_aigu:á:é:í:ó:ú:ý:j́@d|accent_circonflexe:ê@f|accent_cedille:ç@c|accent_trema@u|€"),
   loc("no_NO", "latin", "latn_qwerty_us", extra_keys="€|æ@a|å@a|ø@o|accent_aigu:é:ó@d|accent_grave:è:ò:ù@f|accent_circonflexe:ê:ô@f"),
   loc("pl_PL", "latin", "latn_qwerty_pl"),
-  loc("pt_BR", "latin", "latn_qwerty_pt", extra_keys="accent_aigu:á:é:í:ó:ú@d|accent_cedille:ç@c|accent_circonflexe:â:ê:ô@f|accent_grave:à:ò@f|accent_tilde:ã:õ@n|€|ª|º"),
+  loc("pt_BR", "latin", "latn_qwerty_br", extra_keys="accent_aigu:á:é:í:ó:ú@d|accent_cedille:ç@c|accent_circonflexe:â:ê:ô@f|accent_grave:à:ò@f|accent_tilde:ã:õ@n|€|ª|º"),
   loc("pt_PT", "latin", "latn_qwerty_pt", extra_keys="accent_aigu:á:é:í:ó:ú@d|accent_cedille:ç@c|accent_circonflexe:â:ê:ô@f|accent_grave:à:ò@f|accent_tilde:ã:õ@n|€|ª|º"),
   loc("ro_RO", "latin", "latn_qwerty_ro", extra_keys="ă|â|î|ș|ț|€|$"),
   loc("ru_RU", "latin", "cyrl_jcuken_ru"),
