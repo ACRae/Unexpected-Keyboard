@@ -151,6 +151,14 @@
     <string name="clipboard_remove_confirm">Remove this clipboard item?</string>
     <string name="clipboard_remove_confirmed">Yes</string>
     <string name="toast_no_voice_input">No voice typing app installed</string>
+    <string name="pref_category_backup">Backup</string>
+    <string name="pref_config_export_title">Export configuration</string>
+    <string name="pref_config_export_summary">Save all settings to a JSON file</string>
+    <string name="pref_config_import_title">Import configuration</string>
+    <string name="pref_config_import_summary">Restore settings from a JSON file</string>
+    <string name="config_export_success">Configuration exported successfully</string>
+    <string name="config_import_success">Configuration imported — keyboard will reload</string>
+    <string name="config_io_error">Operation failed: could not read or write the file</string>
     <string name="pref_category_clipboard">Clipboard</string>
     <string name="pref_clipboard_history_duration">Clipboard memory duration</string>
     <string name="pref_clipboard_history_duration_1">At most 1 minute</string>

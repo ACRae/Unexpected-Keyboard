@@ -64,6 +64,10 @@
     <juloo.keyboard2.prefs.IntSlideBarPreference android:key="custom_border_radius" android:title="@string/pref_corners_radius_title" android:summary="%s%%" android:defaultValue="0" min="0" max="100" android:dependency="border_config"/>
     <juloo.keyboard2.prefs.SlideBarPreference android:key="custom_border_line_width" android:title="@string/pref_border_width_title" android:summary="%sdp" android:defaultValue="0" min="0" max="5" android:dependency="border_config"/>
   </PreferenceCategory>
+  <PreferenceCategory android:title="@string/pref_category_backup">
+    <Preference android:key="config_export" android:title="@string/pref_config_export_title" android:summary="@string/pref_config_export_summary"/>
+    <Preference android:key="config_import" android:title="@string/pref_config_import_title" android:summary="@string/pref_config_import_summary"/>
+  </PreferenceCategory>
   <PreferenceCategory android:title="@string/pref_category_clipboard">
     <ListPreference android:key="clipboard_history_duration" android:title="@string/pref_clipboard_history_duration" android:summary="%s" android:defaultValue="5" android:entries="@array/pref_clipboard_duration_entries" android:entryValues="@array/pref_clipboard_duration_values"/>
   </PreferenceCategory>
