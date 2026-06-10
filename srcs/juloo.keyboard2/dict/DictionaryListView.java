@@ -28,9 +28,12 @@ import juloo.keyboard2.Utils;
 
 public class DictionaryListView extends LinearLayout
 {
+  public interface Listener { void onChange(); }
+
   List<DictView> _dict_views;
   Dictionaries _dictionaries;
   Set<String> _pending = new HashSet();
+  Listener _listener;
 
   public DictionaryListView(Context ctx, AttributeSet attrs)
   {
@@ -40,31 +43,47 @@ public class DictionaryListView extends LinearLayout
     inflate_views(ctx);
   }
 
+  public void setListener(Listener l) { _listener = l; }
+
   void inflate_views(Context ctx)
   {
     DeviceLocales locales = DeviceLocales.load(ctx);
     SupportedDictionaries ds = new SupportedDictionaries(ctx.getResources());
     DownloadBtnListener listener = this.new DownloadBtnListener();
     _dict_views = new ArrayList<DictView>();
+    Set<String> shown_dicts = new HashSet<String>();
     for (DeviceLocales.Loc loc : locales.installed)
     {
       int idx = (loc.dictionary != null) ? ds.find(loc.dictionary) : -1;
-      if (idx >= 0)
+      if (idx >= 0 && !shown_dicts.contains(ds.dict_name(idx)))
       {
         DictView dv = new DictView(ctx, ds, idx, listener);
         addView(dv.view);
         _dict_views.add(dv);
+        shown_dicts.add(ds.dict_name(idx));
+      }
+    }
+    // Always show bundled dicts regardless of device locale.
+    for (String bundled_name : Dictionaries.BUNDLED_DICTS)
+    {
+      if (!shown_dicts.contains(bundled_name))
+      {
+        int idx = ds.find(bundled_name);
+        if (idx >= 0)
+        {
+          DictView dv = new DictView(ctx, ds, idx, listener);
+          addView(dv.view);
+          _dict_views.add(dv);
+        }
       }
     }
     refresh();
-    // The keyboard is not enabled and the list is empty, show a message.
-    if (locales.installed.size() == 0)
+    if (_dict_views.isEmpty())
       addView(View.inflate(ctx, R.layout.dictionary_status_not_enabled, null));
   }
 
-  /** Update the "installed" status of item views. Meaning whether the
-      "download" or "delete" button is shown. */
-  void refresh()
+  /** Update the "installed" status of item views. */
+  public void refresh()
   {
     Set<String> installed = _dictionaries.get_installed();
     for (DictView d : _dict_views)
@@ -120,6 +139,7 @@ public class DictionaryListView extends LinearLayout
                {
                  _pending.remove(name);
                  refresh();
+                 if (_listener != null) _listener.onChange();
                }
              });
        }

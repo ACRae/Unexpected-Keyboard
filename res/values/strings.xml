@@ -175,6 +175,7 @@
     <string name="dict_import_url_title">Import from URL</string>
     <string name="dict_import_url_hint">https://example.com/dict.dict</string>
     <string name="dict_import_select_locale">Select the language for this dictionary</string>
+    <string name="dict_installed_header">Installed dictionaries</string>
     <string name="dictionaries_activity_not_enabled">You must first enable the keyboard to download dictionaries.</string>
     <string name="candidates_status_click_to_install">Click to install a dictionary for %s</string>
 </resources>

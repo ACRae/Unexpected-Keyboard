@@ -10,6 +10,12 @@ import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import juloo.keyboard2.R;
 
 public class DictionariesActivity extends Activity
@@ -17,6 +23,8 @@ public class DictionariesActivity extends Activity
   static final int REQ_IMPORT_FILE = 1;
 
   DictionaryListView _list_view;
+  LinearLayout _installed_container;
+  TextView _installed_header;
 
   @Override
   public void onCreate(Bundle savedInstanceState)
@@ -24,6 +32,16 @@ public class DictionariesActivity extends Activity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.dictionaries_activity);
     _list_view = (DictionaryListView)findViewById(R.id.dict_list_view);
+    _installed_container = (LinearLayout)findViewById(R.id.dict_installed_container);
+    _installed_header = (TextView)findViewById(R.id.dict_installed_header);
+
+    _list_view.setListener(new DictionaryListView.Listener()
+        {
+          @Override
+          public void onChange() { rebuild_installed_section(); }
+        });
+
+    rebuild_installed_section();
 
     findViewById(R.id.dict_import_file_btn).setOnClickListener(
         new View.OnClickListener()
@@ -38,6 +56,38 @@ public class DictionariesActivity extends Activity
           @Override
           public void onClick(View v) { showImportUrlDialog(); }
         });
+  }
+
+  void rebuild_installed_section()
+  {
+    _installed_container.removeAllViews();
+    final Dictionaries dicts = Dictionaries.instance(this);
+    final SupportedDictionaries ds = new SupportedDictionaries(getResources());
+    Set<String> installed_set = dicts.get_installed();
+    List<String> installed = new ArrayList<String>(installed_set);
+    Collections.sort(installed);
+    _installed_header.setVisibility(installed.isEmpty() ? View.GONE : View.VISIBLE);
+    for (final String dict_name : installed)
+    {
+      View row = View.inflate(this, R.layout.dictionary_download_item, null);
+      int idx = ds.find(dict_name);
+      String label = (idx >= 0) ? ds.display_name(idx) : dict_name;
+      ((TextView)row.findViewById(R.id.dictionary_download_locale)).setText(label);
+      row.findViewById(R.id.dictionary_download_size).setVisibility(View.GONE);
+      View btn = row.findViewById(R.id.dictionary_download_button);
+      btn.setBackgroundResource(R.drawable.ic_delete);
+      btn.setOnClickListener(new View.OnClickListener()
+          {
+            @Override
+            public void onClick(View v)
+            {
+              dicts.uninstall(dict_name);
+              _list_view.refresh();
+              rebuild_installed_section();
+            }
+          });
+      _installed_container.addView(row);
+    }
   }
 
   void startImportFromFile()
